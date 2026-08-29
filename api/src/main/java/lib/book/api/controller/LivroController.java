@@ -1,6 +1,10 @@
 package lib.book.api.controller;
 
+import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lib.book.api.livros.DadosCadastrarLivro;
+import lib.book.api.livros.LivroRepository;
+import lib.book.api.livros.Livros;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,7 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 public class LivroController {
 
+    @Autowired
+    private LivroRepository repository;
+
     @PostMapping
-    public void cadastrar(@RequestBody DadosCadastrarLivro dados) {
+    @Transactional
+    public void cadastrar(@RequestBody @Valid DadosCadastrarLivro dados) {
+        repository.save(new Livros(dados));
     }
 }
